@@ -72,7 +72,6 @@ def get_metadata_from_search(keyword):
 
 	resp = requests.get(search_endpoint_url, params={'q': keyword})
 	post_entries = parse_article_entities(resp.text)
-	print(post_entries)
 	metadata = [parse_article_meta(entry) for entry in post_entries]
 	return metadata
 
