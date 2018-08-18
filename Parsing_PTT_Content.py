@@ -1,6 +1,7 @@
 import requests
 import re
 from requests_html import HTML
+from multiprocessing import Pool
 
 def fetch(url):
 	response = requests.get(url)

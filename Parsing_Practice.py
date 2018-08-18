@@ -33,7 +33,7 @@ def parse_article_meta(entry):
 			match_author = re.search('\<(\w*)\>', meta['title']) #這是在爬 <edisonchu> 這個字
 			if match_author:
 				meta['author'] = match_author.group(1)
-
+		meta['link'] = ""
 	return meta
 
 def get_metadata_from(url):
@@ -65,5 +65,4 @@ start_url = 'https://www.ptt.cc/bbs/Beauty/index.html'
 metadata = get_page_meta(start_url, num_pages=5)
 
 for meta in metadata:
-	if meta['title'].find('本文已被刪除') == -1:
-		print(meta['title'], meta['push'], meta['date'], meta['author'], meta['link'])
+	print(meta['title'], meta['push'], meta['date'], meta['author'], meta['link'])
