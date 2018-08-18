@@ -3,6 +3,7 @@ import re
 from requests_html import HTML
 
 domain = 'https://www.ptt.cc'
+search_endpoint_url = 'https://www.ptt.cc/bbs/Beauty/search'
 
 def fetch(url):
 	response = requests.get(url)
@@ -61,8 +62,23 @@ def get_page_meta(url, num_pages):
 
 	return collected_meta
 
-start_url = 'https://www.ptt.cc/bbs/Beauty/index.html'
-metadata = get_page_meta(start_url, num_pages=5)
+def get_metadata_from_search(keyword):
 
+	def parse_next_link(doc):
+		html = HTML(html=doc)
+		controls = html.find('.action-bar a.btn.wide')
+		link = controls[1].attrs['href']
+		return domain + link
+
+	resp = requests.get(search_endpoint_url, params={'q': keyword})
+	post_entries = parse_article_entities(resp.text)
+	print(post_entries)
+	metadata = [parse_article_meta(entry) for entry in post_entries]
+	return metadata
+
+
+# start_url = 'https://www.ptt.cc/bbs/Beauty/index.html'
+# metadata = get_page_meta(start_url, num_pages=5)
+metadata = get_metadata_from_search("涼")
 for meta in metadata:
 	print(meta['title'], meta['push'], meta['date'], meta['author'], meta['link'])
