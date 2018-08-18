@@ -23,7 +23,7 @@ def parse_article_meta(entry):
 
 	try:
 		meta['author'] = entry.find('div.author', first=True).text
-		meta['link'] = entry.find('div.title > a', first=True).attrs['href']
+		meta['link'] = domain + entry.find('div.title > a', first=True).attrs['href']
 	except AttributeError:
 		if '(本文已被刪除)' in meta['title']:
 			match_author = re.search('\[(\w*)\]', meta['title']) #這是在爬 [haudai] 這個字
@@ -61,8 +61,9 @@ def get_page_meta(url, num_pages):
 
 	return collected_meta
 
-start_url = 'https://www.ptt.cc/bbs/movie/index.html'
+start_url = 'https://www.ptt.cc/bbs/Beauty/index.html'
 metadata = get_page_meta(start_url, num_pages=5)
 
 for meta in metadata:
-	print(meta['title'], meta['push'], meta['date'], meta['author'])
+	if meta['title'].find('本文已被刪除') == -1:
+		print(meta['title'], meta['push'], meta['date'], meta['author'], meta['link'])
