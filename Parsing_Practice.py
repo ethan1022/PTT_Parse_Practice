@@ -1,9 +1,10 @@
 import requests
 import re
 from requests_html import HTML
+from url_elements import url_elements
 
 domain = 'https://www.ptt.cc'
-search_endpoint_url = 'https://www.ptt.cc/bbs/Beauty/search'
+# search_endpoint_url = 'https://www.ptt.cc/bbs/MacShop/search'
 
 def fetch(url):
 	response = requests.get(url)
@@ -19,7 +20,7 @@ def parse_article_meta(entry):
 	meta = {
 		'title':entry.find('div.title', first=True).text,
 		'push':entry.find('div.nrec', first=True).text,
-		'date':entry.find('div.date', first=True).text, # first=True 什麼意思？
+		'date':entry.find('div.date', first=True).text,
 	}
 
 	try:
@@ -75,9 +76,9 @@ def get_metadata_from_search(keyword):
 	metadata = [parse_article_meta(entry) for entry in post_entries]
 	return metadata
 
-
-# start_url = 'https://www.ptt.cc/bbs/Beauty/index.html'
-# metadata = get_page_meta(start_url, num_pages=5)
-metadata = get_metadata_from_search("涼")
-for meta in metadata:
-	print(meta['title'], meta['push'], meta['date'], meta['author'], meta['link'])
+for element in url_elements:
+	start_url = 'https://www.ptt.cc/bbs/' + element + '/index.html'
+	metadata = get_page_meta(start_url, num_pages=5)
+	for meta in metadata:
+		print(meta['title'], meta['push'], meta['date'], meta['author'], meta['link'])
+# metadata = get_metadata_from_search("涼")
